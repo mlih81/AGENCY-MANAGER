@@ -1,4 +1,4 @@
-import { Booking, Client, Colleague, CorporatePartner, AgentProfile } from '../types';
+import { Booking, Client, Colleague, CorporatePartner, AgentProfile } from '../types.ts';
 
 const STORAGE_KEYS = {
   BOOKINGS: 'travelpro_bookings',

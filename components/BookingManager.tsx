@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { Booking, BookingStatus, Passenger, BookingCategory, Client } from '../types';
-import { Plus, Search, Filter, Plane, Calendar, User, Users, Briefcase, Trash2, ArrowRight, Download } from 'lucide-react';
+import React, { useState } from 'react';
+import { Booking, BookingStatus, Passenger, Client } from '../types.ts';
+import { Plus, Search, Filter, Plane, Users, Briefcase, Trash2, Download } from 'lucide-react';
 import * as XLSX from 'xlsx';
 
 interface BookingManagerProps {
@@ -144,112 +144,18 @@ const BookingManager: React.FC<BookingManagerProps> = ({
     const ws = XLSX.utils.aoa_to_sheet([]);
 
     // 3. Add Content
-    
-    // -- Title Row --
     XLSX.utils.sheet_add_aoa(ws, [["FLIGHT BOOKING REPORT"]], { origin: "A1" });
-    
-    // -- Metadata Row --
     XLSX.utils.sheet_add_aoa(ws, [[`Generated on: ${new Date().toLocaleString()}`]], { origin: "A2" });
-
-    // -- Header Row --
     XLSX.utils.sheet_add_aoa(ws, [headers], { origin: "A4" });
-
-    // -- Data Rows --
     XLSX.utils.sheet_add_aoa(ws, dataRows, { origin: "A5" });
 
     // 4. Styling (Professional Layout)
     const cols = [
-        { wch: 10 }, // PNR
-        { wch: 12 }, // Status
-        { wch: 12 }, // Category
-        { wch: 25 }, // Client
-        { wch: 20 }, // Notes
-        { wch: 35 }, // Passengers
-        { wch: 20 }, // Route
-        { wch: 20 }, // Airline
-        { wch: 12 }, // Dep
-        { wch: 12 }, // Ret
-        { wch: 10 }, // Price
-        { wch: 8 },  // Curr
-        { wch: 22 }  // Deadline
+        { wch: 10 }, { wch: 12 }, { wch: 12 }, { wch: 25 }, { wch: 20 },
+        { wch: 35 }, { wch: 20 }, { wch: 20 }, { wch: 12 }, { wch: 12 },
+        { wch: 10 }, { wch: 8 },  { wch: 22 }
     ];
     ws['!cols'] = cols;
-
-    // Merges for Title
-    ws['!merges'] = [
-        { s: { r: 0, c: 0 }, e: { r: 0, c: headers.length - 1 } }, // Merge Title
-        { s: { r: 1, c: 0 }, e: { r: 1, c: headers.length - 1 } }  // Merge Metadata
-    ];
-
-    // Apply Styles to Cells
-    const range = XLSX.utils.decode_range(ws['!ref'] || "A1:A1");
-    
-    for (let R = range.s.r; R <= range.e.r; ++R) {
-        for (let C = range.s.c; C <= range.e.c; ++C) {
-            const cellRef = XLSX.utils.encode_cell({ c: C, r: R });
-            if (!ws[cellRef]) continue;
-
-            if (!ws[cellRef].s) ws[cellRef].s = {};
-
-            // Default Border for all table cells
-            if (R >= 3) {
-                ws[cellRef].s.border = {
-                    top: { style: "thin", color: { rgb: "E2E8F0" } },
-                    bottom: { style: "thin", color: { rgb: "E2E8F0" } },
-                    left: { style: "thin", color: { rgb: "E2E8F0" } },
-                    right: { style: "thin", color: { rgb: "E2E8F0" } }
-                };
-                ws[cellRef].s.alignment = { vertical: "center", horizontal: "left", wrapText: true };
-                ws[cellRef].s.font = { name: "Arial", sz: 10, color: { rgb: "334155" } };
-            }
-
-            // Title Style (Row 0)
-            if (R === 0) {
-                ws[cellRef].s = {
-                    font: { name: "Arial", sz: 18, bold: true, color: { rgb: "FFFFFF" } },
-                    fill: { fgColor: { rgb: "4F46E5" } }, // Indigo
-                    alignment: { horizontal: "center", vertical: "center" }
-                };
-            }
-            // Metadata Style (Row 1)
-            else if (R === 1) {
-                ws[cellRef].s = {
-                    font: { name: "Arial", sz: 10, italic: true, color: { rgb: "64748B" } },
-                    alignment: { horizontal: "right", vertical: "center" },
-                    fill: { fgColor: { rgb: "F1F5F9" } } // Light Slate
-                };
-            }
-            // Header Style (Row 3 - Actual headers)
-            else if (R === 3) {
-                ws[cellRef].s = {
-                    font: { name: "Arial", sz: 11, bold: true, color: { rgb: "FFFFFF" } },
-                    fill: { fgColor: { rgb: "1E293B" } }, // Slate 800
-                    alignment: { horizontal: "center", vertical: "center" },
-                    border: {
-                        bottom: { style: "medium", color: { rgb: "FFFFFF" } },
-                        right: { style: "thin", color: { rgb: "FFFFFF" } }
-                    }
-                };
-            }
-            // Status Column Styling (Column 1)
-            else if (R > 3 && C === 1) {
-                const status = ws[cellRef].v;
-                let color = "334155";
-                if (status === "Ticketed") color = "16A34A"; // Green
-                if (status === "Pending") color = "CA8A04"; // Yellow/Orange
-                if (status === "Optioned") color = "9333EA"; // Purple
-                if (status === "Cancelled") color = "DC2626"; // Red
-                
-                ws[cellRef].s.font = { bold: true, color: { rgb: color } };
-                ws[cellRef].s.alignment = { horizontal: "center" };
-            }
-            // Price Column (Column 10)
-            else if (R > 3 && C === 10) {
-                 ws[cellRef].s.font = { bold: true };
-                 ws[cellRef].s.alignment = { horizontal: "right" };
-            }
-        }
-    }
 
     // 5. Write File
     XLSX.utils.book_append_sheet(wb, ws, "Bookings");

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Booking, BookingStatus, Client } from '../types';
+import { Booking, BookingStatus, Client } from '../types.ts';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
 import { AlertCircle, CheckCircle, Clock, TrendingUp, Briefcase, Users, PlusCircle } from 'lucide-react';
 

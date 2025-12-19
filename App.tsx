@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { LayoutDashboard, Plane, Users, CalendarDays, Settings, LogOut, Briefcase, MessageCircle, Database, ShieldCheck, Download } from 'lucide-react';
-import Dashboard from './components/Dashboard';
-import BookingManager from './components/BookingManager';
-import ClientManager from './components/ClientManager';
-import CorporateManager from './components/CorporateManager';
-import SettingsManager from './components/SettingsManager';
-import MessageCenter from './components/MessageCenter';
-import { storage } from './services/storage';
-import { MOCK_CLIENTS, MOCK_COLLEAGUES, MOCK_PARTNERS } from './constants';
-import { Booking, BookingStatus, Client, Colleague, CorporatePartner, AgentProfile } from './types';
+import { LayoutDashboard, Plane, Users, CalendarDays, Settings, Briefcase, MessageCircle, Database, ShieldCheck } from 'lucide-react';
+import Dashboard from './components/Dashboard.tsx';
+import BookingManager from './components/BookingManager.tsx';
+import ClientManager from './components/ClientManager.tsx';
+import CorporateManager from './components/CorporateManager.tsx';
+import SettingsManager from './components/SettingsManager.tsx';
+import MessageCenter from './components/MessageCenter.tsx';
+import { storage } from './services/storage.ts';
+import { MOCK_CLIENTS, MOCK_COLLEAGUES, MOCK_PARTNERS } from './constants.ts';
+import { Booking, BookingStatus, Client, Colleague, CorporatePartner, AgentProfile } from './types.ts';
 
 // --- Internal Components for Calendar ---
 const CalendarView: React.FC<{ bookings: Booking[] }> = ({ bookings }) => {

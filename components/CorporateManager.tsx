@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { CorporatePartner } from '../types';
+import { CorporatePartner } from '../types.ts';
 import { Building2, Plus, Search, MapPin, User, Phone, Mail, FileText, Trash2 } from 'lucide-react';
 
 interface CorporatePartnerManagerProps {

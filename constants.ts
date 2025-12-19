@@ -1,4 +1,4 @@
-import { Booking, BookingStatus, UserRole, Client, Colleague, CorporatePartner } from './types';
+import { Booking, BookingStatus, UserRole, Client, Colleague, CorporatePartner } from './types.ts';
 
 export const MOCK_CLIENTS: Client[] = [
   {

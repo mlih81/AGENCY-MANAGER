@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Client, UserRole } from '../types';
-import { User, Phone, Mail, Briefcase, Plus, Search, MessageCircle, Send, FileText, Trash2, Megaphone, Edit3 } from 'lucide-react';
+import { Client, UserRole } from '../types.ts';
+import { User, Phone, Mail, Plus, Search, MessageCircle, Send, FileText, Trash2, Megaphone, Edit3 } from 'lucide-react';
 
 interface ClientManagerProps {
   clients: Client[];
@@ -57,7 +57,6 @@ const ClientManager: React.FC<ClientManagerProps> = ({ clients, onAddClient, onU
 
     setIsModalOpen(false);
     setEditingClient(null);
-    setClientForm({ role: UserRole.CLIENT, language: 'fr', preferredComm: 'WhatsApp' });
   };
 
   const filteredClients = clients.filter(c => 
@@ -97,7 +96,6 @@ const ClientManager: React.FC<ClientManagerProps> = ({ clients, onAddClient, onU
                     type="button"
                     onClick={handleBroadcastEmail}
                     className="flex items-center gap-2 bg-white text-slate-700 border border-slate-300 hover:bg-slate-50 px-4 py-2 rounded-lg transition-colors shadow-sm font-medium"
-                    title="Send email to all clients"
                 >
                     <Megaphone size={18} className="text-orange-500" /> Group Email
                 </button>
@@ -111,7 +109,6 @@ const ClientManager: React.FC<ClientManagerProps> = ({ clients, onAddClient, onU
             </div>
        </div>
 
-       {/* Search */}
        <div className="mb-6 relative">
           <Search className="absolute left-3 top-2.5 text-slate-400" size={18} />
           <input 
@@ -123,17 +120,16 @@ const ClientManager: React.FC<ClientManagerProps> = ({ clients, onAddClient, onU
           />
        </div>
 
-       {/* Grid */}
        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 overflow-y-auto pb-4">
          {filteredClients.map(client => (
-           <div key={client.id} className="bg-white rounded-xl p-6 shadow-sm border border-slate-200 hover:shadow-md transition-shadow flex flex-col relative">
+           <div key={client.id} className="bg-white rounded-xl p-6 shadow-sm border border-slate-200 hover:shadow-md transition-shadow flex flex-col relative overflow-visible">
              
-             {/* Action Buttons - Fixed click area and z-index */}
-             <div className="absolute top-4 right-4 flex gap-2 z-30">
+             {/* Action Buttons - Fixed z-index and interaction */}
+             <div className="absolute top-4 right-4 flex gap-2 z-[60]">
                 <button 
                     type="button"
                     onClick={() => handleOpenEditModal(client)}
-                    className="text-slate-400 hover:text-indigo-600 p-2.5 bg-white rounded-full transition-all border border-slate-100 shadow-sm hover:shadow-md cursor-pointer"
+                    className="text-slate-400 hover:text-indigo-600 p-2.5 bg-slate-50 rounded-full transition-all border border-slate-100 shadow-sm hover:shadow-md hover:bg-white cursor-pointer"
                     title="Modify Profile"
                 >
                     <Edit3 size={18}/>
@@ -141,7 +137,7 @@ const ClientManager: React.FC<ClientManagerProps> = ({ clients, onAddClient, onU
                 <button 
                     type="button"
                     onClick={() => onDeleteClient(client.id)}
-                    className="text-slate-400 hover:text-red-500 p-2.5 bg-white rounded-full transition-all border border-slate-100 shadow-sm hover:shadow-md cursor-pointer"
+                    className="text-slate-400 hover:text-red-500 p-2.5 bg-slate-50 rounded-full transition-all border border-slate-100 shadow-sm hover:shadow-md hover:bg-white cursor-pointer"
                     title="Delete Client Profile"
                 >
                     <Trash2 size={18}/>
@@ -152,7 +148,7 @@ const ClientManager: React.FC<ClientManagerProps> = ({ clients, onAddClient, onU
                 <div className="p-3 rounded-full bg-blue-100 text-blue-600">
                     <User size={24}/>
                 </div>
-                <div className="pr-20"> {/* Padding to avoid overlapping buttons */}
+                <div className="pr-20"> 
                     <h3 className="font-bold text-slate-800 text-lg truncate max-w-[150px]">{client.name}</h3>
                     <div className="flex gap-2 mt-1">
                         <span className="text-[10px] uppercase font-bold bg-slate-100 text-slate-500 px-2 py-0.5 rounded">
@@ -179,7 +175,6 @@ const ClientManager: React.FC<ClientManagerProps> = ({ clients, onAddClient, onU
                 )}
              </div>
 
-             {/* Communication Actions */}
              <div className="mt-6 pt-4 border-t border-slate-100 grid grid-cols-2 gap-3">
                 <button 
                     type="button"
@@ -200,16 +195,15 @@ const ClientManager: React.FC<ClientManagerProps> = ({ clients, onAddClient, onU
          ))}
        </div>
 
-       {/* Modal for Add / Edit */}
        {isModalOpen && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 backdrop-blur-sm">
-            <div className="bg-white rounded-xl shadow-2xl w-full max-w-md">
-                <div className="bg-indigo-600 p-4 rounded-t-xl flex justify-between items-center text-white">
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[100] p-4 backdrop-blur-sm">
+            <div className="bg-white rounded-xl shadow-2xl w-full max-w-md overflow-hidden">
+                <div className="bg-indigo-600 p-4 flex justify-between items-center text-white">
                     <h2 className="font-bold text-lg flex items-center gap-2">
                         {editingClient ? <Edit3 size={20}/> : <Plus size={20}/>}
                         {editingClient ? 'Edit Client Profile' : 'Add New Client'}
                     </h2>
-                    <button type="button" onClick={() => setIsModalOpen(false)} className="hover:bg-indigo-700 p-1 rounded">✕</button>
+                    <button type="button" onClick={() => setIsModalOpen(false)} className="hover:bg-indigo-700 p-1 rounded transition-colors">✕</button>
                 </div>
                 <form onSubmit={handleSubmit} className="p-6 space-y-4">
                     <div>
@@ -249,7 +243,7 @@ const ClientManager: React.FC<ClientManagerProps> = ({ clients, onAddClient, onU
                         />
                     </div>
                     
-                    <button type="submit" className="w-full bg-indigo-600 text-white py-2.5 rounded-lg hover:bg-indigo-700 font-bold mt-2 shadow-lg transition-colors">
+                    <button type="submit" className="w-full bg-indigo-600 text-white py-3 rounded-lg hover:bg-indigo-700 font-bold mt-2 shadow-lg transition-all hover:scale-[1.02]">
                         {editingClient ? 'Update Profile' : 'Save Client Profile'}
                     </button>
                 </form>
